@@ -1,0 +1,14 @@
+C:\Users\Honor\source\repos\KruskalAlgorithmProject\KruskalAlgorithmProject\bin\Debug\net6.0\KruskalAlgorithmProject.exe
+C:\Users\Honor\source\repos\KruskalAlgorithmProject\KruskalAlgorithmProject\bin\Debug\net6.0\KruskalAlgorithmProject.deps.json
+C:\Users\Honor\source\repos\KruskalAlgorithmProject\KruskalAlgorithmProject\bin\Debug\net6.0\KruskalAlgorithmProject.runtimeconfig.json
+C:\Users\Honor\source\repos\KruskalAlgorithmProject\KruskalAlgorithmProject\bin\Debug\net6.0\KruskalAlgorithmProject.dll
+C:\Users\Honor\source\repos\KruskalAlgorithmProject\KruskalAlgorithmProject\bin\Debug\net6.0\KruskalAlgorithmProject.pdb
+C:\Users\Honor\source\repos\KruskalAlgorithmProject\KruskalAlgorithmProject\obj\Debug\net6.0\KruskalAlgorithmProject.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Honor\source\repos\KruskalAlgorithmProject\KruskalAlgorithmProject\obj\Debug\net6.0\KruskalAlgorithmProject.AssemblyInfoInputs.cache
+C:\Users\Honor\source\repos\KruskalAlgorithmProject\KruskalAlgorithmProject\obj\Debug\net6.0\KruskalAlgorithmProject.AssemblyInfo.cs
+C:\Users\Honor\source\repos\KruskalAlgorithmProject\KruskalAlgorithmProject\obj\Debug\net6.0\KruskalAlgorithmProject.csproj.CoreCompileInputs.cache
+C:\Users\Honor\source\repos\KruskalAlgorithmProject\KruskalAlgorithmProject\obj\Debug\net6.0\KruskalAlgorithmProject.dll
+C:\Users\Honor\source\repos\KruskalAlgorithmProject\KruskalAlgorithmProject\obj\Debug\net6.0\refint\KruskalAlgorithmProject.dll
+C:\Users\Honor\source\repos\KruskalAlgorithmProject\KruskalAlgorithmProject\obj\Debug\net6.0\KruskalAlgorithmProject.pdb
+C:\Users\Honor\source\repos\KruskalAlgorithmProject\KruskalAlgorithmProject\obj\Debug\net6.0\KruskalAlgorithmProject.genruntimeconfig.cache
+C:\Users\Honor\source\repos\KruskalAlgorithmProject\KruskalAlgorithmProject\obj\Debug\net6.0\ref\KruskalAlgorithmProject.dll
