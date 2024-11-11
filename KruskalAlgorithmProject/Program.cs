@@ -1,151 +1,141 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
-using System.Diagnostics;
 
-namespace KruskalAlgorithm
+class Graph
 {
-    // Класс для представления рёбер графа
-    public class Edge : IComparable<Edge>
+    private Dictionary<string, int> vertexMap; // Словарь для отображения вершин в индексы
+    public List<Edge> Edges { get; set; }
+
+    public Graph()
     {
-        public int Source { get; set; }
-        public int Destination { get; set; }
-        public int Weight { get; set; }
-
-        public Edge(int source, int destination, int weight)
-        {
-            Source = source;
-            Destination = destination;
-            Weight = weight;
-        }
-
-        // Сравнение рёбер по весу
-        public int CompareTo(Edge other) => Weight.CompareTo(other.Weight);
+        Edges = new List<Edge>();
+        vertexMap = new Dictionary<string, int>();
     }
 
-    // Класс для представления графа
-    public class Graph
+    public void AddEdge(string vertex1, string vertex2, int weight)
     {
-        private int _vertices;
-        private List<Edge> _edges;
-
-        public Graph(int vertices)
+        // Преобразуем имена вершин в индексы
+        if (!vertexMap.ContainsKey(vertex1))
         {
-            _vertices = vertices;
-            _edges = new List<Edge>();
+            vertexMap[vertex1] = vertexMap.Count;
+        }
+        if (!vertexMap.ContainsKey(vertex2))
+        {
+            vertexMap[vertex2] = vertexMap.Count;
         }
 
-        public void AddEdge(int source, int destination, int weight)
+        int v1Index = vertexMap[vertex1];
+        int v2Index = vertexMap[vertex2];
+
+        Edges.Add(new Edge(v1Index, v2Index, weight));
+    }
+
+    public List<Edge> Kruskal()
+    {
+        List<Edge> mst = new List<Edge>();
+        UnionFind uf = new UnionFind(vertexMap.Count);  // Количество уникальных вершин
+
+        // Сортировка рёбер по весу
+        var sortedEdges = Edges.OrderBy(e => e.Weight).ToList();
+
+        foreach (var edge in sortedEdges)
         {
-            _edges.Add(new Edge(source, destination, weight));
-        }
+            int u = uf.Find(edge.Vertex1);
+            int v = uf.Find(edge.Vertex2);
 
-        // Находим минимальное остовное дерево с использованием алгоритма Краскала
-        public List<Edge> KruskalMST()
-        {
-            List<Edge> result = new List<Edge>(); // Хранение рёбер МСТ
-            _edges.Sort(); // Сортировка рёбер по весу
-
-            int[] parent = new int[_vertices];
-            for (int i = 0; i < _vertices; i++)
-                parent[i] = i;
-
-            foreach (Edge edge in _edges)
+            if (u != v)
             {
-                int sourceRoot = Find(parent, edge.Source);
-                int destinationRoot = Find(parent, edge.Destination);
-
-                if (sourceRoot != destinationRoot)
-                {
-                    result.Add(edge);
-                    Union(parent, sourceRoot, destinationRoot);
-                }
+                mst.Add(edge);
+                uf.Union(u, v);
             }
-
-            return result;
         }
 
-        // Найти корень вершины
-        private int Find(int[] parent, int vertex)
+        return mst;
+    }
+}
+
+class Edge
+{
+    public int Vertex1 { get; set; }
+    public int Vertex2 { get; set; }
+    public int Weight { get; set; }
+
+    public Edge(int vertex1, int vertex2, int weight)
+    {
+        Vertex1 = vertex1;
+        Vertex2 = vertex2;
+        Weight = weight;
+    }
+}
+
+class UnionFind
+{
+    private int[] parent;
+    private int[] rank;
+
+    public UnionFind(int n)
+    {
+        parent = new int[n];
+        rank = new int[n];
+
+        for (int i = 0; i < n; i++)
         {
-            if (parent[vertex] != vertex)
-                parent[vertex] = Find(parent, parent[vertex]);
-            return parent[vertex];
-        }
-
-        // Объединение двух поддеревьев
-        private void Union(int[] parent, int root1, int root2)
-        {
-            int root1Parent = Find(parent, root1);
-            int root2Parent = Find(parent, root2);
-            parent[root1Parent] = root2Parent;
-        }
-
-        // Метод для тестирования и сбора данных
-        public static void TestGraph(int vertices, List<Edge> edges)
-        {
-            Graph graph = new Graph(vertices);
-            foreach (var edge in edges)
-            {
-                graph.AddEdge(edge.Source, edge.Destination, edge.Weight);
-            }
-
-            Stopwatch stopwatch = Stopwatch.StartNew();
-            List<Edge> mst = graph.KruskalMST();
-            stopwatch.Stop();
-
-            int totalWeight = 0;
-            foreach (Edge edge in mst)
-            {
-                totalWeight += edge.Weight;
-            }
-
-            Console.WriteLine($"Число вершин: {vertices}, Число рёбер: {edges.Count}, Суммарный вес МСТ: {totalWeight}, Время выполнения: {stopwatch.ElapsedMilliseconds} мс");
+            parent[i] = i;
         }
     }
 
-    class Program
+    public int Find(int x)
     {
-        static void Main(string[] args)
+        if (parent[x] != x)
         {
-            // Пример тестирования на нескольких графах
+            parent[x] = Find(parent[x]);
+        }
+        return parent[x];
+    }
 
-            // Полный граф
-            var edges1 = new List<Edge>
-            {
-                new Edge(0, 1, 4), new Edge(0, 2, 3), new Edge(1, 2, 1),
-                new Edge(1, 3, 2), new Edge(2, 3, 4), new Edge(3, 4, 2)
-            };
-            Graph.TestGraph(5, edges1);
+    public void Union(int x, int y)
+    {
+        int rootX = Find(x);
+        int rootY = Find(y);
 
-            // Разреженный граф
-            var edges2 = new List<Edge>
+        if (rootX != rootY)
+        {
+            if (rank[rootX] > rank[rootY])
             {
-                new Edge(0, 1, 6), new Edge(0, 3, 5), new Edge(1, 2, 1),
-                new Edge(3, 4, 3)
-            };
-            Graph.TestGraph(5, edges2);
-
-            // Циклический граф
-            var edges3 = new List<Edge>
-            {
-                new Edge(0, 1, 4), new Edge(1, 2, 3), new Edge(2, 3, 2),
-                new Edge(3, 4, 4), new Edge(4, 0, 1)
-            };
-            Graph.TestGraph(5, edges3);
-
-            // Большой граф
-            var edges4 = new List<Edge>();
-            int vertices4 = 50;
-            Random rand = new Random();
-            for (int i = 0; i < vertices4; i++)
-            {
-                for (int j = i + 1; j < vertices4; j++)
-                {
-                    edges4.Add(new Edge(i, j, rand.Next(1, 10)));
-                }
+                parent[rootY] = rootX;
             }
-            Graph.TestGraph(vertices4, edges4);
+            else if (rank[rootX] < rank[rootY])
+            {
+                parent[rootX] = rootY;
+            }
+            else
+            {
+                parent[rootY] = rootX;
+                rank[rootX]++;
+            }
         }
     }
 }
 
+class Program
+{
+    static void Main()
+    {
+        Graph graph = new Graph();
+
+        graph.AddEdge("A", "B", 1);
+        graph.AddEdge("A", "C", 3);
+        graph.AddEdge("B", "C", 2);
+        graph.AddEdge("C", "D", 4);
+        graph.AddEdge("B", "D", 5);
+
+        var mst = graph.Kruskal();
+
+        Console.WriteLine("Минимальное остовное дерево:");
+        foreach (var edge in mst)
+        {
+            Console.WriteLine($"{edge.Vertex1} - {edge.Vertex2}: {edge.Weight}");
+        }
+    }
+}
